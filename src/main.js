@@ -2,6 +2,7 @@ import os from 'node:os';
 import { rl } from './repl.js';
 import { ls, cd, up } from './navigation.js';
 import { csvToJson } from './commands/csvToJson.js';
+import { jsonToCSV } from './commands/jsonToCsv.js';
 
 let currentDir = os.homedir();
 
@@ -12,7 +13,8 @@ const commands = {
   ls,
   cd,
   up,
-  'csv-to-json': csvToJson
+  'csv-to-json': csvToJson,
+  'json-to-csv': jsonToCSV,
 }
 
 rl.prompt();
@@ -37,6 +39,9 @@ rl.on('line', async (input) => {
           break;
         case 'csv-to-json':
           await csvToJson(currentDir, args);
+          break;
+        case 'json-to-csv':
+          await jsonToCSV(currentDir, args);
           break;
         default:
           console.log('Unknown command');

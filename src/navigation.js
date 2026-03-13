@@ -27,10 +27,24 @@ export async function ls(currentDir) {
   }
 }
 
-export async function up() {
-
+export async function up(currentDir) {
+  const parent = path.dirname(currentDir);
+  
+  if(parent === currentDir) {
+    return currentDir;
+  }
+  
+  return parent;
 }
 
-export async function cd() {
+export async function cd(currentDir, target) {
+  const newPath = path.resolve(currentDir, target);
 
+  const info = await stat(newPath);
+
+  if(!info.isDirectory) {
+    throw new Error();
+  }
+
+  return newPath;
 }

@@ -1,38 +1,48 @@
 import os from 'node:os';
 import { rl } from './repl.js';
 import { ls, cd, up } from './navigation.js';
+import { csvToJson } from './commands/csvToJson.js';
 
 let currentDir = os.homedir();
 
 console.log('Welcome to Data Processing CLI!');
 console.log(`You are currently in ${currentDir}`);
 
-// function parseArgs(args) {
-//   const result = {};
-
-//   for (let i = 0; i < args.length; i += 2) {
-//     result[args[i]] = args[i + 1];
-//   }
-
-//   return result;
-// }
-
 const commands = {
   ls,
   cd,
-  up
+  up,
+  'csv-to-json': csvToJson
 }
 
 rl.prompt();
 
 rl.on('line', async (input) => {
   const [command, ...args] = input.trim().split(' ');
+  const pathArg = args.join(' ');
   try {
     const handler = commands[command];
     if(!handler) {
       console.log('invalid input');
     } else {
-      await ls(currentDir);
+      switch(command) {
+        case 'cd':
+          currentDir = await cd(currentDir, pathArg);
+          break;
+        case 'up':
+          currentDir = up(currentDir);
+          break;
+        case 'ls':
+          await ls(currentDir);
+          break;
+        case 'csv-to-json':
+          await csvToJson(currentDir, args);
+          break;
+        default:
+          console.log('Unknown command');
+          break;
+      }
+
       console.log(`You are currently in ${currentDir}`);
     }
   } catch {

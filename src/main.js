@@ -4,6 +4,7 @@ import { ls, cd, up } from './navigation.js';
 import { csvToJson } from './commands/csvToJson.js';
 import { jsonToCSV } from './commands/jsonToCsv.js';
 import { count } from './commands/count.js';
+import { hash } from './commands/hash.js';
 
 let currentDir = os.homedir();
 
@@ -17,6 +18,7 @@ const commands = {
   'csv-to-json': csvToJson,
   'json-to-csv': jsonToCSV,
   'count': count,
+  'hash': hash,
 }
 
 rl.prompt();
@@ -47,6 +49,9 @@ rl.on('line', async (input) => {
           break;
         case 'count':
           await count(currentDir, args);
+          break;
+        case 'hash':
+          await hash(currentDir, args);
           break;
         default:
           console.log('Unknown command');

@@ -5,6 +5,7 @@ import { csvToJson } from './commands/csvToJson.js';
 import { jsonToCSV } from './commands/jsonToCsv.js';
 import { count } from './commands/count.js';
 import { hash } from './commands/hash.js';
+import { hashCompare } from './commands/hashCompare.js';
 
 let currentDir = os.homedir();
 
@@ -19,6 +20,7 @@ const commands = {
   'json-to-csv': jsonToCSV,
   'count': count,
   'hash': hash,
+  'hash-compare': hashCompare,
 }
 
 rl.prompt();
@@ -52,6 +54,9 @@ rl.on('line', async (input) => {
           break;
         case 'hash':
           await hash(currentDir, args);
+          break;
+        case 'hash-compare':
+          await hashCompare(currentDir, args);
           break;
         default:
           console.log('Unknown command');

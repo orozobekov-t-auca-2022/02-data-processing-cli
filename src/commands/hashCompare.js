@@ -1,9 +1,9 @@
 import { createReadStream } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { pipeline } from 'node:stream/promises';
+import { Writable } from 'node:stream';
 import path from 'node:path';
 import { argParser } from '../utils/argParser.js';
-import { readFile } from 'node:fs/promises';
 
 const algorithms = ['sha256', 'md5', 'sha512'];
 
@@ -31,7 +31,16 @@ export async function hashCompare(currentDir, args) {
   await pipeline(readStream, hash);
   const calculatedHash = hash.digest('hex');
 
-  const fileContent = await readFile(hashPath, 'utf8');
+  let fileContent = '';
+  await pipeline(
+    createReadStream(hashPath, { encoding: 'utf8' }),
+    new Writable({
+      write(chunk, _encoding, callback) {
+        fileContent += chunk;
+        callback();
+      }
+    })
+  );
 
   let expected = fileContent.trim();
 

@@ -42,7 +42,7 @@ export async function cd(currentDir, target) {
 
   const info = await stat(newPath);
 
-  if(!info.isDirectory) {
+  if(!info.isDirectory()) {
     throw new Error();
   }
 

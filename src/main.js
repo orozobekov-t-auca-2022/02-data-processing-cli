@@ -7,6 +7,7 @@ import { count } from './commands/count.js';
 import { hash } from './commands/hash.js';
 import { hashCompare } from './commands/hashCompare.js';
 import { encrypt } from './commands/encrypt.js';
+import { decrypt } from './commands/decrypt.js';
 
 let currentDir = os.homedir();
 
@@ -23,6 +24,7 @@ const commands = {
   hash,
   'hash-compare': hashCompare,
   encrypt,
+  decrypt
 }
 
 rl.prompt();
@@ -62,6 +64,9 @@ rl.on('line', async (input) => {
           break;
         case 'encrypt':
           await encrypt(currentDir, args);
+          break;
+        case 'decrypt':
+          await decrypt(currentDir, args);
           break;
         default:
           console.log('Unknown command');
